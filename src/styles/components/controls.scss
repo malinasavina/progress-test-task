@@ -7,16 +7,20 @@
   }
 
   &__controls {
+    list-style: none;
     font-size: 18px;
+  }
+
+  &__control {
+
+    &:not(:last-child) {
+      margin-bottom: 15px;
+    }
   }
 
   &__label {
     display: flex;
     align-items: center;
-
-    &:not(:last-child) {
-      margin-bottom: 15px;
-    }
 
     &-text {
       margin-left: 25px;

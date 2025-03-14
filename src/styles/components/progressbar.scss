@@ -2,7 +2,8 @@
   padding: 20px;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100vh;
+  max-height: 568px;
   max-width: 530px;
   margin: 0 auto;
 
@@ -40,7 +41,20 @@
         transform-origin: center;
         rotate: -90deg;
         transition: stroke-dashoffset 0.3s;
+
+        &_animated {
+          animation: progress-animation 2s infinite;
+        }
       }
     }
+  }
+}
+
+@keyframes progress-animation {
+  0% {
+    stroke-dashoffset: 395;
+  }
+  100% {
+    stroke-dashoffset: 0;
   }
 }

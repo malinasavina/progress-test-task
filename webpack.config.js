@@ -8,6 +8,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle[contenthash].js',
+    publicPath: process.env.NODE_ENV === 'production' ? '/progress-test-task/' : '',
     clean: true
   },
   module: {

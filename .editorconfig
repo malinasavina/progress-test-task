@@ -1,0 +1,30 @@
+# .editorconfig
+
+# Общие настройки для всех файлов
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+indent_size = 2
+insert_spaces = true
+trim_trailing_whitespace = true
+max_line_length = 80
+
+# Настройки для JavaScript файлов
+[*.js]
+indent_size = 2
+quote_type = single
+
+# Настройки для SCSS файлов
+[*.{scss,sass}]
+indent_size = 2
+
+# Настройки для HTML файлов
+[*.html]
+indent_size = 2
+
+# Настройки для JSON файлов
+[*.json]
+indent_size = 2

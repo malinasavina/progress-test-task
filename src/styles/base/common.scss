@@ -3,23 +3,12 @@
   --color-gray: #eff3f6;
   --color-white: #fff;
   --color-black: #000;
+
+  --cubic-bezier: cubic-bezier(0.85, 0, 0.15, 1);
 }
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
-
-.body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-  font-family: Roboto, sans-serif;
-
-  &__inner {
-    flex-grow: 1;
-  }
 }

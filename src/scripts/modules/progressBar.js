@@ -1,9 +1,11 @@
 class Progress {
   constructor(container) {
     this.container = container;
+    this.progressBar = container.querySelector('.js-progress-bar');
     this.circle = container.querySelector('.js-progress-circle');
     this.input = container.querySelector('.js-progress-input');
     this.animationToggle = container.querySelector('.js-animation-toggle');
+    this.hideToggle = container.querySelector('.js-hide-toggle');
 
     this.radius = this.circle.r.baseVal.value;
     this.circumference = 2 * Math.PI * this.radius;
@@ -24,7 +26,8 @@ class Progress {
     this.setProgress(this.progress, this.isAnimationRunning);
 
     this.input.addEventListener('input', this.updateFromInput.bind(this));
-    this.animationToggle.addEventListener('change', this.toggleAnimation.bind(this))
+    this.animationToggle.addEventListener('change', this.toggleAnimation.bind(this));
+    this.hideToggle.addEventListener('change', this.toggleVisibility.bind(this));
   }
 
   setProgress(progress, isAnimated) {
@@ -72,6 +75,10 @@ class Progress {
     this.animationToggle.checked
       ? this.startAnimation()
       : this.stopAnimation();
+  }
+
+  toggleVisibility() {
+    this.progressBar.classList.toggle('progress__bar_hidden');
   }
 }
 

@@ -2,10 +2,6 @@
 
 .progress {
 
-  &:has(.progress__checkbox_hide:checked) .progress__bar {
-    display: none;
-  }
-
   &__controls {
     list-style: none;
     font-size: 18px;

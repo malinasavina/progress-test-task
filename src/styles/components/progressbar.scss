@@ -28,6 +28,10 @@
 
   &__bar {
     position: relative;
+
+    &_hidden {
+      display: none;
+    }
   }
 
   &__svg {

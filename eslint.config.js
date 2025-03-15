@@ -1,12 +1,18 @@
-import recommendedConfig from "@eslint/js";
+import { defineConfig } from "eslint/config";
+import babelParser from "@babel/eslint-parser";
 
-export default [
-  recommendedConfig.configs.recommended, // Подключаем "eslint:recommended"
+export default defineConfig([
   {
     files: ["**/*.js"],
     languageOptions: {
       ecmaVersion: "latest",
       sourceType: "module",
+      parser: babelParser,
+      parserOptions: {
+        ecmaVersion: 2020,
+        sourceType: "module",
+        requireConfigFile: false,
+      },
     },
     rules: {
       "no-console": "warn",
@@ -16,4 +22,4 @@ export default [
     },
     ignores: ["node_modules/", "dist/"],
   },
-];
+]);

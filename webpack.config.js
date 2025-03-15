@@ -1,36 +1,41 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const ESLintPlugin = require("eslint-webpack-plugin");
+import path from 'path';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import ESLintPlugin from 'eslint-webpack-plugin';
 
-module.exports = {
+export default {
   entry: './src/scripts/main.js',
   mode: process.env.NODE_ENV || 'production',
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(process.cwd(), 'dist'),
     filename: 'bundle[contenthash].js',
     publicPath: process.env.NODE_ENV === 'production' ? '/progress-test-task/' : '',
     clean: true
   },
   module: {
-    rules: [{
-      test: /\.scss$/,
-      use: [
-        MiniCssExtractPlugin.loader,
-        "css-loader",
-        "sass-loader"
-      ],
-    }, {
-      test: /\.js$/,
-      use: 'babel-loader',
-      exclude: /node_modules/
-    }, {
-      test: /\.(png|svg|jpg|gif|woff(2)?|eot|ttf|otf)$/,
-      type: 'asset/resource'
-    }, {
-      test: /\.html$/,
-      use: ["html-loader"],
-    }]
+    rules: [
+      {
+        test: /\.scss$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'sass-loader'
+        ],
+      },
+      {
+        test: /\.js$/,
+        use: 'babel-loader',
+        exclude: /node_modules/
+      },
+      {
+        test: /\.(png|svg|jpg|gif|woff(2)?|eot|ttf|otf)$/,
+        type: 'asset/resource'
+      },
+      {
+        test: /\.html$/,
+        use: ['html-loader'],
+      }
+    ]
   },
   plugins: [
     new MiniCssExtractPlugin({
@@ -40,7 +45,7 @@ module.exports = {
       template: './src/index.html'
     }),
     new ESLintPlugin({
-      extensions: ["js"],
+      extensions: ['js'],
       emitWarning: true,
     }),
   ],
@@ -50,4 +55,4 @@ module.exports = {
   resolve: {
     extensions: ['.js']
   }
-}
+};

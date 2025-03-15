@@ -54,9 +54,7 @@
   }
 
   &__checkbox {
-    position: absolute;
-    -webkit-appearance: none;
-    appearance: none;
+    @include mixins.visibility-hidden;
 
     &:checked {
       &+ .progress__toggle {

@@ -37,7 +37,12 @@ class Progress {
     this.circle.style.strokeDashoffset = offset;
   }
 
-  updateFromInput() {
+  updateFromInput(event) {
+    if (this.isAnimationRunning) {
+      this.stopAnimation();
+      this.animationToggle.checked = false;
+    }
+
     let inputValue = isNaN(+this.input.value) ? 0 : Math.min(Math.max(+this.input.value, 0), 100);
     this.progress = inputValue / 100;
 
@@ -47,7 +52,7 @@ class Progress {
 
   animateProgress(timeStamp) {
     if (!this.startTime) this.startTime = timeStamp;
-    this.progress = (timeStamp - this.startTime) / this.duration ;
+    this.progress = (timeStamp - this.startTime) / this.duration;
 
     if (this.progress > 1) {
       this.startTime = timeStamp;
@@ -72,9 +77,12 @@ class Progress {
   }
 
   toggleAnimation() {
-    this.animationToggle.checked
-      ? this.startAnimation()
-      : this.stopAnimation();
+    if (this.animationToggle.checked) {
+      this.startAnimation();
+    } else {
+      this.stopAnimation();
+      this.input.value = Math.floor(this.progress * 100);
+    }
   }
 
   toggleVisibility() {

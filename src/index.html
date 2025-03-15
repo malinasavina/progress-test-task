@@ -10,11 +10,11 @@
     <h1 class="progress__title">Progress</h1>
     <div class="progress__inner">
       <div class="progress__bar js-progress-bar">
-        <svg class="progress__svg" width="170" height="170">
-          <circle class="progress__circle" stroke="#eff3f6" stroke-width="11" cx="85" cy="85" r="63" fill="transparent" />
+        <svg class="progress__svg" viewBox="0 0 170 170" width="170" height="170">
+          <circle class="progress__circle" cx="50%" cy="50%" r="61" />
         </svg>
-        <svg class="progress__svg progress__svg_dynamic" width="170" height="170">
-          <circle class="progress__circle js-progress-circle" stroke="#005bff" stroke-width="11" cx="85" cy="85" r="63" fill="transparent" />
+        <svg class="progress__svg progress__svg_dynamic" viewBox="0 0 170 170" width="170" height="170">
+          <circle class="progress__circle js-progress-circle" cx="50%" cy="50%" r="61" />
         </svg>
       </div>
       <ul class="progress__controls">
@@ -27,14 +27,14 @@
         <li class="progress__control">
           <label class="progress__label">
             <input class="progress__checkbox js-animation-toggle" type="checkbox">
-            <div class="progress__toggle"></div>
+            <span class="progress__toggle"></span>
             <span class="progress__label-text">Animate</span>
           </label>
         </li>
         <li class="progress__control">
           <label class="progress__label">
             <input class="progress__checkbox js-hide-toggle" type="checkbox">
-            <div class="progress__toggle"></div>
+            <span class="progress__toggle"></span>
             <span class="progress__label-text">Hide</span>
           </label>
         </li>

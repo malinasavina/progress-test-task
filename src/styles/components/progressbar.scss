@@ -44,8 +44,15 @@
       .progress__circle {
         transform-origin: center;
         rotate: -90deg;
+        stroke: var(--color-blue);
       }
     }
+  }
+
+  &__circle {
+    stroke-width: 11px;
+    stroke: var(--color-gray);
+    fill: transparent;
   }
 }
 

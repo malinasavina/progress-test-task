@@ -1,4 +1,4 @@
-class Progress {
+export default class Progress {
   constructor(container) {
     this.container = container;
     this.progressBar = container.querySelector('.js-progress-bar');
@@ -89,11 +89,3 @@ class Progress {
     this.progressBar.classList.toggle('progress__bar_hidden');
   }
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-  const progressContainers = document.querySelectorAll('.progress');
-
-  progressContainers.forEach(container => {
-    new Progress(container);
-  });
-});

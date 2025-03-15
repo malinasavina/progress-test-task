@@ -66,11 +66,6 @@ JavaScript**, сборка осуществляется с помощью **Webp
    npm run build
    ```
 
-4. **Запуск ESLint**
-   ```sh
-   npm run lint
-   ```
-
 ## Технологии
 
 - HTML,

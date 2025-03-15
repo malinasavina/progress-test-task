@@ -1,18 +1,25 @@
 {
   "name": "progress-test-task",
+  "version": "1.0.0",
+  "type": "module",
   "homepage": "https://malinasavina.github.io/progress-test-task/",
   "scripts": {
     "start": "NODE_ENV=development webpack serve",
     "build": "webpack",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist",
+    "lint": "eslint src/**/*.js"
   },
   "devDependencies": {
     "@babel/cli": "^7.26.4",
     "@babel/core": "^7.26.10",
+    "@babel/eslint-parser": "^7.26.10",
     "@babel/preset-env": "^7.26.9",
+    "@eslint/js": "^9.22.0",
     "babel-loader": "^10.0.0",
     "css-loader": "^7.1.2",
+    "eslint": "^9.22.0",
+    "eslint-webpack-plugin": "^5.0.0",
     "gh-pages": "^6.3.0",
     "html-loader": "^5.1.0",
     "html-webpack-plugin": "^5.6.3",

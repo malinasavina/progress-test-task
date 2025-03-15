@@ -31,7 +31,7 @@ export default class Progress {
   }
 
   setProgress(progress, isAnimated) {
-    this.circle.style.transition = !isAnimated ? 'stroke-dashoffset 0.3s ease-in-out' : 'none';
+    this.circle.style.transition = isAnimated ? 'none' : 'stroke-dashoffset 0.3s ease-in-out';
 
     let offset = this.circumference * (1 - progress);
     this.circle.style.strokeDashoffset = offset;
@@ -51,10 +51,14 @@ export default class Progress {
   }
 
   animateProgress(timeStamp) {
-    if (!this.startTime) this.startTime = timeStamp;
-    this.progress = (timeStamp - this.startTime) / this.duration;
+    if (!this.startTime) {
+      this.startTime = timeStamp - this.progress * this.duration;
+    }
 
-    if (this.progress > 1) {
+    let elapsedTime = timeStamp - this.startTime;
+    this.progress = elapsedTime / this.duration;
+
+    if (this.progress >= 1) {
       this.startTime = timeStamp;
       this.progress = 0;
     }

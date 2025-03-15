@@ -1,5 +1,15 @@
 export default class Progress {
-  constructor(container) {
+  constructor(container, percent = 75, initialState = 'normal') {
+    const validStates = ['normal', 'animated', 'hidden'];
+
+    if (!validStates.includes(initialState)) {
+      initialState = 'normal';
+    }
+
+    if (isNaN(percent) || percent < 0 || percent > 100) {
+      percent = 75;
+    }
+
     this.container = container;
     this.progressBar = container.querySelector('.js-progress-bar');
     this.circle = container.querySelector('.js-progress-circle');
@@ -12,16 +22,26 @@ export default class Progress {
 
     this.startTime = null;
     this.animationFrameId = null;
-    this.progress = +this.input.value / 100;
+    this.progress = percent / 100;
     this.isAnimationRunning = false;
     this.duration = 2000;
 
-    this.init();
+    this.init(initialState);
   }
 
-  init() {
+  init(state) {
     this.circle.style.strokeDasharray = `${this.circumference} ${this.circumference}`;
     this.circle.style.strokeDashoffset = this.circumference;
+
+    this.input.value = Math.trunc(this.progress * 100);
+
+    if (state === 'animated') {
+      this.animationToggle.checked = true;
+      this.startAnimation();
+    } else if (state === 'hidden') {
+      this.progressBar.classList.add('progress__bar_hidden');
+      this.hideToggle.checked = true;
+    }
 
     this.setProgress(this.progress, this.isAnimationRunning);
 

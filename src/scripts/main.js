@@ -2,9 +2,7 @@ import Progress from './components/Progress.js';
 import '../styles/main.scss';
 
 document.addEventListener('DOMContentLoaded', () => {
-  const progressContainers = document.querySelectorAll('.progress');
+  const progressContainer = document.querySelector('.progress');
 
-  progressContainers.forEach(container => {
-    new Progress(container);
-  });
+  new Progress(progressContainer, 75, 'normal');
 });

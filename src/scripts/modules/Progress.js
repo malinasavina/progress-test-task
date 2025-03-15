@@ -37,7 +37,7 @@ class Progress {
     this.circle.style.strokeDashoffset = offset;
   }
 
-  updateFromInput(event) {
+  updateFromInput() {
     if (this.isAnimationRunning) {
       this.stopAnimation();
       this.animationToggle.checked = false;

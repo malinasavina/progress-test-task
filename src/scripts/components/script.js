@@ -1,5 +1,5 @@
 export default class Progress {
-  constructor(container, percent) {
+  constructor(container, percent = 0) {
     this.container = container;
     this.states = {
       normal: new Normal(),
@@ -12,11 +12,9 @@ export default class Progress {
     this.circle = container.querySelector('.js-progress-circle');
     this.radius = this.circle.r.baseVal.value;
     this.circumference = 2 * Math.PI * this.radius;
-    this.progress = percent / 100;
+    this.progress = percent;
 
-    this.animStartTime = null;
     this.animFrameId = null;
-    this.animDuration = 2000;
 
 
     this.initUI();
@@ -26,11 +24,21 @@ export default class Progress {
     this.circle.style.strokeDasharray = `${this.circumference} ${this.circumference}`;
     this.circle.style.strokeDashoffset = this.circumference;
 
-    this.UpdateProgress();
+    this.UpdateProgress(this.progress);
   }
 
-  UpdateProgress() {
-    this.currentState.UpdateProgress(this);
+  UpdateProgress(percent) {
+    if (this.currentState !== this.states.hidden) {
+      this.currentState = this.states.normal;
+      this.circle.style.transition = 'stroke-dashoffset 0.3s ease-in-out';
+    }
+
+    let offset = this.circumference * (1 - percent / 100);
+    this.circle.style.strokeDashoffset = offset;
+  }
+
+  GetProgress() {
+    return Math.trunc(this.progress);
   }
 
   StartAnimation() {
@@ -48,17 +56,9 @@ export default class Progress {
   HideProgress() {
     this.currentState.HideProgress(this);
   }
-
-  AnimateProgress() {
-
-  }
 }
 
 class ProgressStates {
-  UpdateProgress() {
-    throw new Error(`В ${this.constructor.name} не описан метод UpdateProgress()`);
-  }
-
   StartAnimation() {
     throw new Error(`В ${this.constructor.name} не описан метод StartAnimation()`);
   }
@@ -77,15 +77,34 @@ class ProgressStates {
 }
 
 class Normal extends ProgressStates {
-  UpdateProgress(progress) {
-    let offset = progress.circumference * (1 - progress.progress);
-
-    progress.circle.style.transition = 'stroke-dashoffset 0.3s ease-in-out';
-    progress.circle.style.strokeDashoffset = offset;
-  }
-
   StartAnimation(progress) {
     progress.currentState = progress.states.animated;
+    progress.circle.style.transition = 'none';
+
+    let animStartTime = null;
+    let animDuration = 2000;
+
+    progress.animFrameId = requestAnimationFrame((time) => animate(time));
+
+    function animate(timeStamp) {
+      if (!animStartTime) animStartTime = timeStamp;
+      let animProgress = (timeStamp - animStartTime) / animDuration;
+
+      if (animProgress > 1) {
+        animStartTime = timeStamp;
+        animProgress = 0; // Зацикливаем анимацию
+      }
+
+      let offset = progress.circumference * (1 - animProgress);
+      progress.circle.style.strokeDashoffset = offset;
+
+      progress.animFrameId = requestAnimationFrame((time) => animate(time));
+    }
+  }
+
+  ShowProgress(progress) {
+    progress.container.classList.remove('progress__bar_hidden');
+    progress.currentState = progress.previousState;
   }
 
   HideProgress(progress) {
@@ -97,16 +116,9 @@ class Normal extends ProgressStates {
 }
 
 class Animated extends ProgressStates {
-  UpdateProgress(progress) {
-    let offset = progress.circumference * (1 - progress.progress);
-
-    progress.circle.style.transition = 'none';
-    progress.circle.style.strokeDashoffset = offset;
-    progress.currentState = progress.states.normal;
-  }
-
   StopAnimation(progress) {
     progress.currentState = progress.states.normal;
+    cancelAnimationFrame(progress.animFrameId);
   }
 
   HideProgress(progress) {
@@ -118,17 +130,13 @@ class Animated extends ProgressStates {
 }
 
 class Hidden extends ProgressStates {
-  UpdateProgress(progress) {
-    let offset = progress.circumference * (1 - progress.progress);
-    progress.circle.style.strokeDashoffset = offset;
-  }
-
   StartAnimation(progress) {
 
   }
 
   StopAnimation(progress) {
-
+    progress.currentState = progress.states.normal;
+    cancelAnimationFrame(progress.animFrameId);
   }
 
   ShowProgress(progress) {

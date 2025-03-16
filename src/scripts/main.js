@@ -7,20 +7,33 @@ document.addEventListener('DOMContentLoaded', () => {
   const animationToggle = document.querySelector('.js-animation-toggle');
   const hideToggle = document.querySelector('.js-hide-toggle');
 
+  let isAnimating = false;
+
   const progress = new Progress(progressContainer, 75);
 
-  input.value = Math.trunc(progress.progress * 100);
+  input.value = progress.GetProgress();
   input.addEventListener('input', function () {
+    if (isAnimating) {
+      progress.StopAnimation();
+      animationToggle.checked = false;
+      isAnimating = false;
+    }
+
     const inputValue = isNaN(+this.value) ? 0 : Math.min(Math.max(+this.value, 0), 100);
-    progress.progress = inputValue / 100;
 
-    progress.UpdateProgress();
+    progress.UpdateProgress(inputValue);
 
-    this.value = Math.trunc(progress.progress * 100);
+    this.value = inputValue;
   });
 
-  animationToggle.addEventListener('change', () => {
-
+  animationToggle.addEventListener('change', function () {
+    if (this.checked) {
+      isAnimating = true;
+      progress.StartAnimation();
+    } else {
+      isAnimating = false;
+      progress.StopAnimation();
+    }
   });
 
   hideToggle.addEventListener('change', function () {

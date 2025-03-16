@@ -1,115 +1,116 @@
 export default class Progress {
-  constructor(container, percent = 75, initialState = 'normal') {
-    const validStates = ['normal', 'animated', 'hidden'];
-
-    if (!validStates.includes(initialState)) {
-      initialState = 'normal';
-    }
-
-    if (isNaN(percent) || percent < 0 || percent > 100) {
-      percent = 75;
-    }
-
+  constructor(container) {
     this.container = container;
-    this.progressBar = container.querySelector('.js-progress-bar');
-    this.circle = container.querySelector('.js-progress-circle');
-    this.input = container.querySelector('.js-progress-input');
-    this.animationToggle = container.querySelector('.js-animation-toggle');
-    this.hideToggle = container.querySelector('.js-hide-toggle');
+    this.states = {
+      normal: new Normal(),
+      animated: new Animated(),
+      hidden: new Hidden()
+    };
+    this.currentState = this.states.normal;
+    this.value = 0;
 
+    this.circle = container.querySelector('.js-progress-circle');
     this.radius = this.circle.r.baseVal.value;
     this.circumference = 2 * Math.PI * this.radius;
 
-    this.startTime = null;
-    this.animationFrameId = null;
-    this.progress = percent / 100;
-    this.isAnimationRunning = false;
-    this.duration = 2000;
+    this.animFrameId = null;
+    this.animStartTime = null;
+    this.animDuration = 2000;
 
-    this.init(initialState);
+    this.initUI();
   }
 
-  init(state) {
+  initUI() {
     this.circle.style.strokeDasharray = `${this.circumference} ${this.circumference}`;
     this.circle.style.strokeDashoffset = this.circumference;
 
-    this.input.value = Math.trunc(this.progress * 100);
-
-    if (state === 'animated') {
-      this.animationToggle.checked = true;
-      this.startAnimation();
-    } else if (state === 'hidden') {
-      this.progressBar.classList.add('progress__bar_hidden');
-      this.hideToggle.checked = true;
-    }
-
-    this.setProgress(this.progress, this.isAnimationRunning);
-
-    this.input.addEventListener('input', this.updateFromInput.bind(this));
-    this.animationToggle.addEventListener('change', this.toggleAnimation.bind(this));
-    this.hideToggle.addEventListener('change', this.toggleVisibility.bind(this));
+    this.currentState.update(this);
   }
 
-  setProgress(progress, isAnimated) {
-    this.circle.style.transition = isAnimated ? 'none' : 'stroke-dashoffset 0.3s ease-in-out';
-
-    let offset = this.circumference * (1 - progress);
-    this.circle.style.strokeDashoffset = offset;
+  setProgressState(state) {
+    this.currentState = this.states[state];
+    this.currentState.update(this);
   }
 
-  updateFromInput() {
-    if (this.isAnimationRunning) {
-      this.stopAnimation();
-      this.animationToggle.checked = false;
-    }
-
-    let inputValue = isNaN(+this.input.value) ? 0 : Math.min(Math.max(+this.input.value, 0), 100);
-    this.progress = inputValue / 100;
-
-    this.setProgress(this.progress, this.isAnimationRunning);
-    this.input.value = inputValue;
+  setProgressValue(value) {
+    this.value = isNaN(+value) ? 0 : Math.min(Math.max(+value, 0), 100);
+    this.currentState.update(this);
   }
 
-  animateProgress(timeStamp) {
-    if (!this.startTime) {
-      this.startTime = timeStamp - this.progress * this.duration;
-    }
-
-    let elapsedTime = timeStamp - this.startTime;
-    this.progress = elapsedTime / this.duration;
-
-    if (this.progress >= 1) {
-      this.startTime = timeStamp;
-      this.progress = 0;
-    }
-
-    this.setProgress(this.progress, this.isAnimationRunning);
-    this.animationFrameId = requestAnimationFrame((time) => this.animateProgress(time));
+  getProgressValue() {
+    return Math.trunc(this.value);
   }
 
   startAnimation() {
-    if (!this.isAnimationRunning) {
-      this.isAnimationRunning = true;
-      this.startTime = null;
-      this.animationFrameId = requestAnimationFrame((time) => this.animateProgress(time));
+    this.circle.style.transition = 'none';
+    this.animFrameId = requestAnimationFrame((time) => this.animate(time));
+  }
+
+  animate(timeStamp) {
+    if (!this.animStartTime) this.animStartTime = timeStamp;
+    let animProgress = (timeStamp - this.animStartTime) / this.animDuration;
+
+    if (animProgress > 1) {
+      this.animStartTime = timeStamp;
+      animProgress = 0; // Зацикливаем анимацию
     }
+
+    let offset = this.circumference * (1 - animProgress);
+    this.circle.style.strokeDashoffset = offset;
+
+    this.animFrameId = requestAnimationFrame((time) => this.animate(time));
+
+    this.value = animProgress * 100;
   }
 
   stopAnimation() {
-    this.isAnimationRunning = false;
-    cancelAnimationFrame(this.animationFrameId);
+    if (this.animFrameId) {
+      cancelAnimationFrame(this.animFrameId);
+      this.animFrameId = null;
+    }
+    this.animStartTime = null;
   }
 
-  toggleAnimation() {
-    if (this.animationToggle.checked) {
-      this.startAnimation();
-    } else {
-      this.stopAnimation();
-      this.input.value = Math.floor(this.progress * 100);
+  showProgress() {
+    this.container.classList.remove('progress__bar_hidden');
+  }
+
+  hideProgress() {
+    this.container.classList.add('progress__bar_hidden');
+  }
+
+}
+
+class ProgressStates {
+  update() {
+
+  }
+}
+
+class Normal extends ProgressStates {
+  update(progress) {
+    progress.showProgress();
+    progress.stopAnimation();
+
+    progress.circle.style.transition = 'stroke-dashoffset 0.3s ease-in-out';
+    let offset = progress.circumference * (1 - progress.value / 100);
+    progress.circle.style.strokeDashoffset = offset;
+  }
+}
+
+class Animated extends ProgressStates {
+  update(progress) {
+    progress.showProgress();
+
+    if (!progress.animFrameId) {
+      progress.startAnimation();
     }
   }
+}
 
-  toggleVisibility() {
-    this.progressBar.classList.toggle('progress__bar_hidden');
+class Hidden extends ProgressStates {
+  update(progress) {
+    progress.stopAnimation();
+    progress.hideProgress();
   }
 }

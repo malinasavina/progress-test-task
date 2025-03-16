@@ -1,4 +1,4 @@
-import Progress from './components/script.js';
+import Progress from './components/Progress.js';
 import '../styles/main.scss';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -7,36 +7,50 @@ document.addEventListener('DOMContentLoaded', () => {
   const animationToggle = document.querySelector('.js-animation-toggle');
   const hideToggle = document.querySelector('.js-hide-toggle');
 
-  let isAnimating = false;
+  const progress = new Progress(progressContainer);
+  let isAnimated = false;
+  let isHidden = false;
 
-  const progress = new Progress(progressContainer, 75);
-
-  input.value = progress.GetProgress();
+  input.value = progress.getProgressValue();
   input.addEventListener('input', function () {
-    if (isAnimating) {
-      progress.StopAnimation();
+    if (isAnimated) {
+      progress.setProgressState('normal');
       animationToggle.checked = false;
-      isAnimating = false;
+      isAnimated = false;
     }
 
-    const inputValue = isNaN(+this.value) ? 0 : Math.min(Math.max(+this.value, 0), 100);
+    if (isHidden) {
+      progress.setProgressState('normal');
+      hideToggle.checked = false;
+      isHidden = false;
+    }
 
-    progress.UpdateProgress(inputValue);
+    progress.setProgressValue(this.value);
 
-    this.value = inputValue;
+    this.value = progress.getProgressValue();
   });
 
   animationToggle.addEventListener('change', function () {
     if (this.checked) {
-      isAnimating = true;
-      progress.StartAnimation();
+      if (isHidden) {
+        hideToggle.checked = false;
+      }
+      progress.setProgressState('animated');
+      isAnimated = true;
     } else {
-      isAnimating = false;
-      progress.StopAnimation();
+      progress.setProgressState('normal');
+      isAnimated = false;
     }
   });
 
   hideToggle.addEventListener('change', function () {
-    this.checked ? progress.HideProgress() : progress.ShowProgress();
+    if (this.checked) {
+      progress.setProgressState('hidden');
+      animationToggle.checked = false;
+      isHidden = true;
+    } else {
+      progress.setProgressState('normal');
+      isHidden = false;
+    }
   });
 });

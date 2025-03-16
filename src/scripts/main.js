@@ -11,23 +11,25 @@ document.addEventListener('DOMContentLoaded', () => {
   let isAnimated = false;
   let isHidden = false;
 
-  input.value = progress.getProgressValue();
-  input.addEventListener('input', function () {
-    if (isAnimated) {
+  const resetToNormal = () => {
+    if (isAnimated || isHidden) {
       progress.setProgressState('normal');
       animationToggle.checked = false;
-      isAnimated = false;
-    }
-
-    if (isHidden) {
-      progress.setProgressState('normal');
       hideToggle.checked = false;
+      isAnimated = false;
       isHidden = false;
     }
+  };
 
+  const updateInputValue = () => {
+    input.value = progress.getProgressValue();
+  };
+
+  input.value = progress.getProgressValue();
+  input.addEventListener('input', function () {
+    resetToNormal();
     progress.setProgressValue(this.value);
-
-    this.value = progress.getProgressValue();
+    updateInputValue();
   });
 
   animationToggle.addEventListener('change', function () {
@@ -40,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       progress.setProgressState('normal');
       isAnimated = false;
+      updateInputValue();
     }
   });
 
@@ -48,6 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
       progress.setProgressState('hidden');
       animationToggle.checked = false;
       isHidden = true;
+      updateInputValue();
     } else {
       progress.setProgressState('normal');
       isHidden = false;

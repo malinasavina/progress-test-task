@@ -28,6 +28,8 @@ export default class Progress {
   }
 
   setProgressState(state) {
+    if (!this.states[state]) return;
+
     this.currentState = this.states[state];
     this.currentState.update(this);
   }
@@ -42,25 +44,33 @@ export default class Progress {
   }
 
   startAnimation() {
+    if (this.animFrameId) return;
+
     this.circle.style.transition = 'none';
     this.animFrameId = requestAnimationFrame((time) => this.animate(time));
   }
 
   animate(timeStamp) {
-    if (!this.animStartTime) this.animStartTime = timeStamp;
-    let animProgress = (timeStamp - this.animStartTime) / this.animDuration;
+    let animProgress = this.value / 100;
 
-    if (animProgress > 1) {
+    if (!this.animStartTime) {
+      this.animStartTime = timeStamp - animProgress * this.animDuration;
+    }
+
+    let elapsedTime = timeStamp - this.animStartTime;
+    animProgress = elapsedTime / this.animDuration;
+
+    if (animProgress >= 1) {
       this.animStartTime = timeStamp;
-      animProgress = 0; // Зацикливаем анимацию
+      animProgress = 0;
     }
 
     let offset = this.circumference * (1 - animProgress);
     this.circle.style.strokeDashoffset = offset;
 
-    this.animFrameId = requestAnimationFrame((time) => this.animate(time));
-
     this.value = animProgress * 100;
+
+    this.animFrameId = requestAnimationFrame((time) => this.animate(time));
   }
 
   stopAnimation() {
@@ -83,7 +93,7 @@ export default class Progress {
 
 class ProgressStates {
   update() {
-
+    throw new Error(`Method update() does not exist in ${this.constructor.name}`);
   }
 }
 
@@ -112,5 +122,7 @@ class Hidden extends ProgressStates {
   update(progress) {
     progress.stopAnimation();
     progress.hideProgress();
+
+    progress.circle.style.strokeDashoffset = progress.circumference;
   }
 }

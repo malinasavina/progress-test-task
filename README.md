@@ -49,45 +49,6 @@ JavaScript**, сборка осуществляется с помощью **Webp
 │── README.md         # Документация проекта
 ```
 
-## Работа с классом `Progress`
-
-### Методы
-
-#### `setProgressState(state)`
-
-Устанавливает состояние прогресс-бара. Доступные состояния:
-
-- `'normal'` – обычный режим (по умолчанию)
-- `'animated'` – режим анимации
-- `'hidden'` – скрывает прогресс-бар
-
-Пример использования:
-
-```js
-progress.setProgressState('animated');
-```
-
-#### `setProgressValue(value)`
-
-Устанавливает степень прогресса. Принимает значения от `0` до `100`.
-
-Пример использования:
-
-```js
-progress.setProgressValue(50);
-```
-
-#### `getProgressValue()`
-
-Возвращает текущее значение состояния прогресса в диапазоне от `0` до `100`.
-
-Пример использования:
-
-```js
-const currentValue = progress.getProgressValue();
-console.log(currentValue);
-```
-
 ## Установка и запуск
 
 1. **Установка зависимостей**
@@ -104,6 +65,39 @@ console.log(currentValue);
    ```sh
    npm run build
    ```
+
+## Использование класса Progress
+
+Для создания прогресс-бара необходимо создать объект класса `Progress`, передав в него HTML-элемент в качестве
+контейнера:
+
+```js
+const progressContainer = document.querySelector('.js-progress-bar');
+const progress = new Progress(progressContainer);
+```
+
+### Методы класса Progress
+
+- **`setProgressState(state)`** – устанавливает состояние прогресс-бара. Доступные состояния:
+  - `'normal'` – обычное отображение
+  - `'animated'` – анимация бесконечного прогресса
+  - `'hidden'` – скрытие прогресс-бара
+
+  ```js
+  progress.setProgressState('animated');
+  ```
+
+- **`setProgressValue(value)`** – устанавливает степень прогресса. Принимает значения от `0` до `100`:
+
+  ```js
+  progress.setProgressValue(50);
+  ```
+
+- **`getProgressValue()`** – возвращает текущее значение прогресса от `0` до `100`:
+
+  ```js
+  console.log(progress.getProgressValue()); // 50
+  ```
 
 ## Технологии
 

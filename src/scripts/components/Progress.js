@@ -65,12 +65,12 @@ export default class Progress {
       this.container.appendChild(progressWrapper);
 
       this.circle = progressCircleDynamic;
-
-      const radius = this.circle.r.baseVal.value;
-      this.circumference = 2 * Math.PI * radius;
     };
 
     createProgressbar();
+
+    const radius = this.circle.r.baseVal.value;
+    this.circumference = 2 * Math.PI * radius;
 
     this.circle.style.strokeDasharray = `${this.circumference} ${this.circumference}`;
     this.circle.style.strokeDashoffset = this.circumference;

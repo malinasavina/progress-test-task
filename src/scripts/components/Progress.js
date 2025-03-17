@@ -9,9 +9,8 @@ export default class Progress {
     this.currentState = this.states.normal;
     this.value = 0;
 
-    this.circle = container.querySelector('.js-progress-circle');
-    this.radius = this.circle.r.baseVal.value;
-    this.circumference = 2 * Math.PI * this.radius;
+    this.circle = null;
+    this.circumference = null;
 
     this.animFrameId = null;
     this.animStartTime = null;
@@ -21,6 +20,58 @@ export default class Progress {
   }
 
   initUI() {
+    const createSvg = (isDynamic) => {
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.setAttribute('width', '170');
+      svg.setAttribute('height', '170');
+      svg.classList.add('class', 'progress__svg');
+
+      if (isDynamic) {
+        svg.classList.add('progress__svg_dynamic');
+      }
+
+      return svg;
+    };
+
+    const createCircle = (isDynamic) => {
+      const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      circle.setAttribute('cx', '85');
+      circle.setAttribute('cy', '85');
+      circle.setAttribute('r', '61');
+      circle.classList.add('progress__circle');
+
+      if (isDynamic) {
+        circle.classList.add('js-progress-circle');
+      }
+
+      return circle;
+    };
+
+    const createProgressbar = () => {
+      const progressSvg = createSvg();
+      const progressSvgDynamic = createSvg(true);
+
+      const progressCircle = createCircle();
+      const progressCircleDynamic = createCircle(true);
+
+      progressSvg.appendChild(progressCircle);
+      progressSvgDynamic.appendChild(progressCircleDynamic);
+
+      let progressWrapper = document.createElement('div');
+      progressWrapper.classList.add('progress');
+      progressWrapper.appendChild(progressSvg);
+      progressWrapper.appendChild(progressSvgDynamic);
+
+      this.container.appendChild(progressWrapper);
+
+      this.circle = progressCircleDynamic;
+
+      const radius = this.circle.r.baseVal.value;
+      this.circumference = 2 * Math.PI * radius;
+    };
+
+    createProgressbar();
+
     this.circle.style.strokeDasharray = `${this.circumference} ${this.circumference}`;
     this.circle.style.strokeDashoffset = this.circumference;
 
@@ -28,7 +79,7 @@ export default class Progress {
   }
 
   setProgressState(state) {
-    if (!this.states[state]) return;
+    if (!this.states[state] || this.currentState === this.states[state]) return;
 
     this.currentState = this.states[state];
     this.currentState.update(this);
@@ -82,11 +133,13 @@ export default class Progress {
   }
 
   showProgress() {
-    this.container.classList.remove('progress__bar_hidden');
+    const wrapper = this.container.querySelector('.progress');
+    wrapper.classList.remove('progress_hidden');
   }
 
   hideProgress() {
-    this.container.classList.add('progress__bar_hidden');
+    const wrapper = this.container.querySelector('.progress');
+    wrapper.classList.add('progress_hidden');
   }
 
 }

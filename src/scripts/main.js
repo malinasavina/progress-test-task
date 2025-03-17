@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const hideToggle = document.querySelector('.js-hide-toggle');
 
   const progress = new Progress(progressContainer);
+
   let isAnimated = false;
   let isHidden = false;
 
@@ -24,8 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const updateInputValue = () => {
     input.value = progress.getProgressValue();
   };
+  updateInputValue();
 
-  input.value = progress.getProgressValue();
   input.addEventListener('input', function () {
     resetToNormal();
     progress.setProgressValue(this.value);
@@ -40,8 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
       progress.setProgressState('animated');
       isAnimated = true;
     } else {
-      progress.setProgressState('normal');
-      isAnimated = false;
+      resetToNormal();
       updateInputValue();
     }
   });
@@ -53,8 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
       isHidden = true;
       updateInputValue();
     } else {
-      progress.setProgressState('normal');
-      isHidden = false;
+      resetToNormal();
     }
   });
 });

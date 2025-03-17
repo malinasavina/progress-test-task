@@ -7,44 +7,35 @@
   <title>Progress Test Task</title>
 </head>
 <body class="body">
-<div class="body__inner">
-  <div class="progress">
-    <h1 class="progress__title">Progress</h1>
-    <div class="progress__inner">
-      <div class="progress__bar js-progress-bar">
-        <svg class="progress__svg" viewBox="0 0 170 170" width="170" height="170">
-          <circle class="progress__circle" cx="50%" cy="50%" r="61"/>
-        </svg>
-        <svg class="progress__svg progress__svg_dynamic" viewBox="0 0 170 170" width="170" height="170">
-          <circle class="progress__circle js-progress-circle" cx="50%" cy="50%" r="61"/>
-        </svg>
-      </div>
-      <ul class="progress__controls">
-        <li class="progress__control">
-          <label class="progress__label">
-            <input
-              class="progress__input js-progress-input" type="text"
-              inputmode="numeric">
-            <span class="progress__label-text">Value</span>
-          </label>
-        </li>
-        <li class="progress__control">
-          <label class="progress__label">
-            <input class="progress__checkbox js-animation-toggle"
-                   type="checkbox">
-            <span class="progress__toggle"></span>
-            <span class="progress__label-text">Animate</span>
-          </label>
-        </li>
-        <li class="progress__control">
-          <label class="progress__label">
-            <input class="progress__checkbox js-hide-toggle" type="checkbox">
-            <span class="progress__toggle"></span>
-            <span class="progress__label-text">Hide</span>
-          </label>
-        </li>
-      </ul>
-    </div>
+<div class="app">
+  <h1 class="app__title">Progress</h1>
+  <div class="app__inner">
+    <div class="app_progress js-progress-bar"></div>
+    <ul class="app__controls">
+      <li class="app__control">
+        <label class="app__label">
+          <input
+            class="app__input js-progress-input" type="text"
+            inputmode="numeric">
+          <span class="app__label-text">Value</span>
+        </label>
+      </li>
+      <li class="app__control">
+        <label class="app__label">
+          <input class="app__checkbox js-animation-toggle"
+                 type="checkbox">
+          <span class="app__toggle"></span>
+          <span class="app__label-text">Animate</span>
+        </label>
+      </li>
+      <li class="app__control">
+        <label class="app__label">
+          <input class="app__checkbox js-hide-toggle" type="checkbox">
+          <span class="app__toggle"></span>
+          <span class="app__label-text">Hide</span>
+        </label>
+      </li>
+    </ul>
   </div>
 </div>
 </body>

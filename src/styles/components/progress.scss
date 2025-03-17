@@ -1,44 +1,12 @@
 @use "../base/mixins" as mixins;
 
 .progress {
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  max-height: 568px;
-  max-width: 568px;
-  margin: 0 auto;
+  position: relative;
+  transition: opacity 0.2s;
+  will-change: opacity;
 
-  @media screen and (min-width: 568px) {
-    max-height: 320px;
-  }
-
-  &__title {
-    font-size: 16px;
-    font-weight: 400;
-  }
-
-  &__inner {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: center;
-    flex-wrap: wrap;
-    flex-grow: 1;
-
-    @media screen and (min-width: 568px) {
-      flex-direction: row;
-    }
-  }
-
-  &__bar {
-    position: relative;
-    transition: opacity 0.2s;
-    will-change: opacity;
-
-    &_hidden {
-      opacity: 0;
-    }
+  &_hidden {
+    opacity: 0;
   }
 
   &__svg_dynamic {
@@ -58,68 +26,5 @@
     stroke-width: 11px;
     stroke: var(--color-gray);
     fill: transparent;
-  }
-
-  &__controls {
-    list-style: none;
-  }
-
-  &__control:not(:last-child) {
-    margin-bottom: 15px;
-  }
-
-  &__label {
-    display: flex;
-    align-items: center;
-
-    &-text {
-      margin-left: 25px;
-    }
-  }
-
-  &__input {
-    font-family: Roboto, sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    border: 2px solid var(--color-black);
-    outline: none;
-    text-align: center;
-
-    @include mixins.input-container;
-  }
-
-  &__toggle {
-    position: relative;
-    background-color: var(--color-gray);
-    cursor: pointer;
-    transition: background-color 0.2s var(--cubic-bezier);
-
-    @include mixins.input-container;
-
-    &::before {
-      content: "";
-      position: absolute;
-      top: 2px;
-      left: 2px;
-      width: 24px;
-      height: 24px;
-      background-color: var(--color-white);
-      border-radius: 50%;
-      transition: transform 0.2s var(--cubic-bezier);
-    }
-  }
-
-  &__checkbox {
-    @include mixins.visibility-hidden;
-
-    &:checked {
-      & + .progress__toggle {
-        background-color: var(--color-blue);
-      }
-
-      & + .progress__toggle::before {
-        transform: translateX(16px);
-      }
-    }
   }
 }
